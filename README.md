@@ -1,2 +1,2 @@
 # WGS
-test
+This is my wgs pipeline
