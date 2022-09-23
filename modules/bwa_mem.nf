@@ -12,7 +12,7 @@ process BWA_MEM {
   script:
   """
   bwa index ${fasta}
-  bwa mem -t 4 ${fasta} ${fastq} > ${example.bam}
+  bwa mem -t 4 ${fasta} ${fastq} > example.bam
   """
 }
 
@@ -23,7 +23,7 @@ process BWA_MEM {
 
     main:
         BWA_MEM (
-          ch_fasta
+          ch_fasta,
           ch_fastq
           )
     emit:
