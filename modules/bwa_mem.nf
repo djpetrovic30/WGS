@@ -7,12 +7,12 @@ process BWA_MEM {
   path fastq
 
   output:
-  path ('*.bam'), emit: bamfile
+  path ('example.bam'), emit: bamfile
 
   script:
   """
   bwa index ${fasta}
-  bwa mem -t 4 ${fasta} ${fastq} > ${*.bam}
+  bwa mem -t 4 ${fasta} ${fastq} > ${example.bam}
   """
 }
 
@@ -33,5 +33,5 @@ process BWA_MEM {
   workflow {
     ch_fasta = Channel.fromPath("/mnt/c/Users/abc/Desktop/Nextflow/bwa_mem/example_human_reference.fasta")
     ch_fastq = Channel.fromPath("/mnt/c/Users/abc/Desktop/Nextflow/bwa_mem/example_human_Illumina.pe_1.fastq")
-    BWA_MEM(ch_fastq)
+     BWA_MEM(ch_fastq, ch_fasta)
   }

@@ -1,1 +1,4 @@
 2022-09-22 17:17:01	-	prickly_meitner	-	b26e6fadb464969ae83b03c25fe970b3	4f1c2387-6b2e-4041-b45e-cdba3cb28e38	nextflow run bwa_mem.nf
+2022-09-23 15:20:46	-	lonely_lavoisier	-	c86ce0836f19c36ebee33da6ca5443ab	7066db81-535d-41c6-874e-90ab7bdaea9c	nextflow run bwa_mem.nf
+2022-09-23 15:21:13	-	tender_mayer	-	3808078ce5f75e90d15b40582f0fabe0	82dd1a9e-c97e-4f17-9d45-018b723b347f	nextflow run bwa_mem.nf
+2022-09-23 15:22:07	5.7s	hopeful_babbage	ERR	5b1541e2bd4c4611056b89da21651f3c	bb9d4b24-68a7-4083-86c8-9cdd5e6888da	nextflow run bwa_mem.nf

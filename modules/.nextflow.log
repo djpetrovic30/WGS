@@ -1,36 +1,63 @@
-Sep-22 17:17:00.095 [main] DEBUG nextflow.cli.Launcher - $> nextflow run bwa_mem.nf
-Sep-22 17:17:00.602 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 22.04.5
-Sep-22 17:17:00.949 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declararion
-Sep-22 17:17:01.003 [main] INFO  nextflow.cli.CmdRun - Launching `bwa_mem.nf` [prickly_meitner] DSL2 - revision: b26e6fadb4
-Sep-22 17:17:01.045 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/root/.nextflow/plugins; core-plugins: nf-amazon@1.7.2,nf-azure@0.13.2,nf-console@1.0.3,nf-ga4gh@1.0.3,nf-google@1.1.4,nf-sqldb@0.4.0,nf-tower@1.4.0
-Sep-22 17:17:01.050 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
-Sep-22 17:17:01.091 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
-Sep-22 17:17:01.116 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
-Sep-22 17:17:01.140 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
-Sep-22 17:17:01.225 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
-Sep-22 17:17:01.469 [main] DEBUG nextflow.Session - Session uuid: 4f1c2387-6b2e-4041-b45e-cdba3cb28e38
-Sep-22 17:17:01.469 [main] DEBUG nextflow.Session - Run name: prickly_meitner
-Sep-22 17:17:01.475 [main] DEBUG nextflow.Session - Executor pool size: 4
-Sep-22 17:17:01.623 [main] DEBUG nextflow.cli.CmdRun - 
+Sep-23 15:22:05.889 [main] DEBUG nextflow.cli.Launcher - $> nextflow run bwa_mem.nf
+Sep-23 15:22:06.470 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 22.04.5
+Sep-23 15:22:06.841 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declararion
+Sep-23 15:22:06.929 [main] INFO  nextflow.cli.CmdRun - Launching `bwa_mem.nf` [hopeful_babbage] DSL2 - revision: 5b1541e2bd
+Sep-23 15:22:06.977 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/root/.nextflow/plugins; core-plugins: nf-amazon@1.7.2,nf-azure@0.13.2,nf-console@1.0.3,nf-ga4gh@1.0.3,nf-google@1.1.4,nf-sqldb@0.4.0,nf-tower@1.4.0
+Sep-23 15:22:06.984 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Sep-23 15:22:07.038 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Sep-23 15:22:07.087 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Sep-23 15:22:07.111 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Sep-23 15:22:07.226 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Sep-23 15:22:07.500 [main] DEBUG nextflow.Session - Session uuid: bb9d4b24-68a7-4083-86c8-9cdd5e6888da
+Sep-23 15:22:07.502 [main] DEBUG nextflow.Session - Run name: hopeful_babbage
+Sep-23 15:22:07.513 [main] DEBUG nextflow.Session - Executor pool size: 4
+Sep-23 15:22:07.714 [main] DEBUG nextflow.cli.CmdRun - 
   Version: 22.04.5 build 5708
   Created: 15-07-2022 16:09 UTC (18:09 CEST)
   System: Linux 5.10.16.3-microsoft-standard-WSL2
   Runtime: Groovy 3.0.10 on OpenJDK 64-Bit Server VM 11.0.16+8-post-Ubuntu-0ubuntu122.04
   Encoding: UTF-8 (UTF-8)
-  Process: 613@DESKTOP-448JM5P [127.0.1.1]
-  CPUs: 4 - Mem: 6.1 GB (4 GB) - Swap: 2 GB (2 GB)
-Sep-22 17:17:01.892 [main] DEBUG nextflow.Session - Work-dir: /mnt/c/Users/abc/Desktop/WGS/modules/work [v9fs]
-Sep-22 17:17:01.900 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /mnt/c/Users/abc/Desktop/WGS/modules/bin
-Sep-22 17:17:01.944 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
-Sep-22 17:17:02.005 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
-Sep-22 17:17:02.128 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
-Sep-22 17:17:02.173 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 5; maxThreads: 1000
-Sep-22 17:17:02.896 [main] DEBUG nextflow.Session - Session start invoked
-Sep-22 17:17:03.882 [main] ERROR nextflow.cli.Launcher - Script compilation error
-- file : /mnt/c/Users/abc/Desktop/WGS/modules/bwa_mem.nf
-- cause: Unexpected input: '{' @ line 3, column 17.
-   process BWA_MEM {
-                   ^
+  Process: 487@DESKTOP-448JM5P [127.0.1.1]
+  CPUs: 4 - Mem: 6.1 GB (4.1 GB) - Swap: 2 GB (2 GB)
+Sep-23 15:22:07.906 [main] DEBUG nextflow.Session - Work-dir: /mnt/c/Users/abc/Desktop/WGS/modules/work [v9fs]
+Sep-23 15:22:07.929 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /mnt/c/Users/abc/Desktop/WGS/modules/bin
+Sep-23 15:22:07.968 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Sep-23 15:22:08.020 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Sep-23 15:22:08.120 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Sep-23 15:22:08.157 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 5; maxThreads: 1000
+Sep-23 15:22:08.846 [main] DEBUG nextflow.Session - Session start invoked
+Sep-23 15:22:11.318 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Sep-23 15:22:11.696 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Sep-23 15:22:11.697 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Sep-23 15:22:11.711 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Sep-23 15:22:11.726 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=6.1 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Sep-23 15:22:12.031 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: BWA_MEM
+Sep-23 15:22:12.034 [main] DEBUG nextflow.Session - Ignite dataflow network (3)
+Sep-23 15:22:12.053 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > BWA_MEM
+Sep-23 15:22:12.057 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Sep-23 15:22:12.058 [main] DEBUG nextflow.Session - Session await
+Sep-23 15:22:12.373 [Actor Thread 3] ERROR nextflow.processor.TaskProcessor - Error executing process > 'BWA_MEM (1)'
 
-1 error
+Caused by:
+  No such variable: example -- Check script 'bwa_mem.nf' at line: 13
 
+Source block:
+  """
+    bwa index ${fasta}
+    bwa mem -t 4 ${fasta} ${fastq} > ${example.bam}
+    """
+
+Tip: you can try to figure out what's wrong by changing to the process work dir and showing the script file named `.command.sh`
+Sep-23 15:22:12.393 [Actor Thread 3] DEBUG nextflow.Session - Session aborted -- Cause: Process `BWA_MEM (1)` script contains error(s)
+Sep-23 15:22:12.441 [Actor Thread 3] DEBUG nextflow.Session - The following nodes are still active:
+[process] BWA_MEM
+  status=ACTIVE
+  port 0: (queue) closed; channel: fasta
+  port 1: (queue) OPEN  ; channel: fastq
+  port 2: (cntrl) -     ; channel: $
+
+Sep-23 15:22:12.470 [main] DEBUG nextflow.Session - Session await > all process finished
+Sep-23 15:22:12.472 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Sep-23 15:22:12.490 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=0; peakCpus=0; peakMemory=0; ]
+Sep-23 15:22:12.707 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Sep-23 15:22:12.865 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
