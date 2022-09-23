@@ -12,7 +12,7 @@ process SAMTOOLS_VIEW {
  script:
 
  """
-  samtools view -h example.bam > example.bam.sam
+  samtools view -h example.bam > example.sam
  """
 }
 
