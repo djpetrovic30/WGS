@@ -16,6 +16,36 @@ process BWA_MEM {
   """
 }
 
+process Samtools_sort {
+  input:
+  path bamfile
+
+  output:
+  tuple val, path('example_sorted.bam'), path('example_sorted.bai'), emit: bamsorted
+
+  script:
+  """
+  samtools sort ${bamfile} example_sorted.bam
+  samtools index example_sorted.bam > example_sorted.bai
+  """
+}
+
+process MarkDuplicates {
+  input:
+  path 'example_sorted.bam'
+
+  output:
+  path 'marked_duplicates.bam'
+
+  script:
+  """
+  java -jar /root/gatk-package-4.2.6.1/gatk-package-4.2.6.1-local.jar MarkDuplicates \
+  -I 'exanple.bam' \
+  -O 'marked_duplicates.bam' \
+  -M 'marked_dup_metrics.txt'
+  """
+}
+
   workflow BWA_MEM_WF {
     take:
         ch_fasta
