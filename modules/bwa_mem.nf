@@ -69,7 +69,7 @@ process Samtools_sort {
   }
 
   workflow {
-    ch_fasta = Channel.fromPath("/mnt/c/Users/abc/Desktop/Nextflow/bwa_mem/example_human_reference.fasta")
-    ch_fastq = Channel.fromPath("/mnt/c/Users/abc/Desktop/Nextflow/bwa_mem/example_human_Illumina.pe_1.fastq")
+    ch_fasta = Channel.fromPath(params.fasta)
+    ch_fastq = Channel.fromPath(params.fastq)
      BWA_MEM_WF(ch_fastq, ch_fasta)
   }
