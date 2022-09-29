@@ -32,22 +32,24 @@ process Samtools_sort {
   """
 }
 
-// process MarkDuplicates {
-//   input:
-//   path bamsorted
-//
-//   output:
-//   path 'marked_duplicates.bam', emit: deduplicate_bam
-//   path 'marked_dup_metrics.txt', emit: deduplicate_metrics
-//
-//   script:
-//   """
-//   gatk MarkDuplicatess \
-//   -I ${bamsorted} \
-//   -O 'marked_duplicates.bam' \
-//   -M 'marked_dup_metrics.txt'
-//   """
-// }
+process MarkDuplicates {
+  publishDir 'bwa_results'
+  input:
+  path bamsorted
+  path baisorted
+
+  output:
+  path 'marked_duplicates.bam', emit: deduplicate_bam
+  path 'marked_dup_metrics.txt', emit: deduplicate_metrics
+
+  script:
+  """
+  gatk MarkDuplicates \
+  -I ${bamsorted} \
+  -O marked_duplicates.bam \
+  -M marked_dup_metrics.txt
+  """
+}
 
   workflow BWA_MEM_WF {
     take:
@@ -64,8 +66,14 @@ process Samtools_sort {
           Samtools_sort (
             ch_bam
             )
+      ch_bamsorted = Samtools_sort.out.bamsorted
+      ch_baisorted = Samtools_sort.out.baisorted
+        MarkDuplicates (
+           ch_bamsorted, ch_baisorted
+          )
     emit:
         bamfile = BWA_MEM.out.bamfile
+
   }
 
   workflow {
