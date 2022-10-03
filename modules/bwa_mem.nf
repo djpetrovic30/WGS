@@ -51,6 +51,43 @@ process MarkDuplicates {
   """
 }
 
+process BaseRecalibrator {
+  publishDir 'bwa_results'
+  input:
+  path deduplicate_bam
+
+  output:
+  path 'recalibration_table', emit: recalibration.table
+
+  script:
+  """
+  gatk BaseRecalibrator \
+  -I ${deduplicate_bam} \
+  -R ${fasta} \
+  --known-sites ${vcf} \
+  -O recalibration.table
+  """
+}
+
+process ApplyBQSR {
+  publishDir 'bwa_results'
+  input:
+  path recalibration.table
+
+  output:
+  path 'recal.bam', emit: recalbam
+
+  script:
+  """
+  gatk ApplyBQSR \
+  -R ${fasta} \
+  -I ${deduplicate_bam} \
+  --bqsr-recal-file ${recalibration.table} \
+  -O recal.bam
+  """
+
+}
+
   workflow BWA_MEM_WF {
     take:
         ch_fasta
@@ -71,6 +108,11 @@ process MarkDuplicates {
         MarkDuplicates (
            ch_bamsorted, ch_baisorted
           )
+
+      ch_deduplicate_bam = MarkDuplicates.out.deduplicate_bam
+         BaseRecalibrator (
+           ch_deduplicate_bam
+           )
     emit:
         bamfile = BWA_MEM.out.bamfile
 
