@@ -1,10 +1,12 @@
 nextflow.enable.dsl=2
 
 process BWA_MEM {
+//  tag "${sample_id}"
   publishDir 'bwa_results'
   input:
   path fasta
   path fastq
+  // path fastq
 
   output:
   path ('example.bam'), emit: bamfile
@@ -55,43 +57,49 @@ process BaseRecalibrator {
   publishDir 'bwa_results'
   input:
   path deduplicate_bam
-
+  path fasta
+  path index
+  path dbsnp
+  path fasta_dict
   output:
-  path 'recalibration_table', emit: recalibration.table
+  path 'recal_data.table', emit: recalibration_table
 
   script:
   """
   gatk BaseRecalibrator \
   -I ${deduplicate_bam} \
   -R ${fasta} \
-  --known-sites ${vcf} \
-  -O recalibration.table
+  --known-sites ${dbsnp} \
+  --output recal_data.table
   """
 }
 
-process ApplyBQSR {
-  publishDir 'bwa_results'
-  input:
-  path recalibration.table
-
-  output:
-  path 'recal.bam', emit: recalbam
-
-  script:
-  """
-  gatk ApplyBQSR \
-  -R ${fasta} \
-  -I ${deduplicate_bam} \
-  --bqsr-recal-file ${recalibration.table} \
-  -O recal.bam
-  """
-
-}
+// process ApplyBQSR {
+//   publishDir 'bwa_results'
+//   input:
+//   path recalibration.table
+//
+//   output:
+//   path 'recal.bam', emit: recalbam
+//
+//   script:
+//   """
+//   gatk ApplyBQSR \
+//   -R ${fasta} \
+//   -I ${deduplicate_bam} \
+//   --bqsr-recal-file ${recalibration.table} \
+//   -O recal.bam
+//   """
+//
+// }
 
   workflow BWA_MEM_WF {
     take:
         ch_fasta
         ch_fastq
+        ch_index
+        ch_dbsnp
+        ch_fasta_dict
 
     main:
         BWA_MEM (
@@ -111,7 +119,7 @@ process ApplyBQSR {
 
       ch_deduplicate_bam = MarkDuplicates.out.deduplicate_bam
          BaseRecalibrator (
-           ch_deduplicate_bam
+           ch_deduplicate_bam, ch_fasta, ch_index, ch_dbsnp, ch_fasta_dict
            )
     emit:
         bamfile = BWA_MEM.out.bamfile
@@ -121,5 +129,8 @@ process ApplyBQSR {
   workflow {
     ch_fasta = Channel.fromPath(params.fasta)
     ch_fastq = Channel.fromPath(params.fastq)
-     BWA_MEM_WF(ch_fastq, ch_fasta)
+    ch_dbsnp = Channel.fromPath(params.dbsnp)
+    ch_index = Channel.fromPath(params.index)
+    ch_fasta_dict = Channel.fromPath(params.fasta_dict)
+    BWA_MEM_WF(ch_fasta, ch_fastq, ch_index, ch_dbsnp, ch_fasta_dict)
   }
