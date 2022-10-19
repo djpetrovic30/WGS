@@ -8,130 +8,169 @@ process BWA_MEM {
   tuple val(sample_id), path(fastq)
 
   output:
-  path ("${sample_id}.bam"), emit: bamfile
-  val(sample_id), emit: sample_id
+  tuple val(sample_id), path("${sample_id}.bam"), emit: bamfile
 
   script:
   """
   bwa index ${fasta}
-  bwa mem -t 4 ${fasta} ${sample_id}.fastq > ${sample_id}.bam
+  bwa mem -t 4 ${fasta} ${fastq} > ${sample_id}.bam
   """
 }
 
-// process Samtools_sort {
-//   publishDir 'bwa_results'
-//   input:
-//   path bamfile
-//
-//   output:
-//   path('example_sorted.bam'), emit: bamsorted
-//   path('example_sorted.bai'), emit: baisorted
-//
-//   script:
-//   """
-//   samtools sort ${bamfile} > example_sorted.bam
-//   samtools index example_sorted.bam > example_sorted.bai
-//   """
-// }
-//
-// process MarkDuplicates {
-//   publishDir 'bwa_results'
-//   input:
-//   path bamsorted
-//   path baisorted
-//
-//   output:
-//   path 'marked_duplicates.bam', emit: deduplicate_bam
-//   path 'marked_dup_metrics.txt', emit: deduplicate_metrics
-//
-//   script:
-//   """
-//   gatk MarkDuplicates \
-//   -I ${bamsorted} \
-//   -O marked_duplicates.bam \
-//   -M marked_dup_metrics.txt
-//   """
-// }
-//
-// process BaseRecalibrator {
-//   publishDir 'bwa_results'
-//   input:
-//   path deduplicate_bam
-//   path fasta
-//   path index
-//   path dbsnp
-//   path fasta_dict
-//   output:
-//   path 'recal_data.table', emit: recalibration_table
-//
-//   script:
-//   """
-//   gatk BaseRecalibrator \
-//   -I ${deduplicate_bam} \
-//   -R ${fasta} \
-//   --known-sites ${dbsnp} \
-//   --output recal_data.table
-//   """
-// }
+process Samtools_sort {
+  publishDir 'bwa_results'
+  input:
+  tuple val(sample_id), path(bamfile)
 
-// process ApplyBQSR {
-//   publishDir 'bwa_results'
-//   input:
-//   path recalibration.table
-//
-//   output:
-//   path 'recal.bam', emit: recalbam
-//
-//   script:
-//   """
-//   gatk ApplyBQSR \
-//   -R ${fasta} \
-//   -I ${deduplicate_bam} \
-//   --bqsr-recal-file ${recalibration.table} \
-//   -O recal.bam
-//   """
-//
-// }
+  output:
+  tuple val(sample_id), path("${sample_id}.sorted_bam"), emit: bamsorted
+  tuple val(sample_id), path("${sample_id}.sorted_bai"), emit: baisorted
 
-  workflow BWA_MEM_WF {
+  script:
+  """
+  samtools sort ${bamfile} > ${sample_id}.sorted_bam
+  samtools index ${sample_id}.sorted_bam > ${sample_id}.sorted_bai
+  """
+}
+
+process MarkDuplicates {
+  publishDir 'bwa_results'
+  input:
+  tuple val(sample_id), path(bamsorted)
+  tuple val(sample_id), path(baisorted)
+
+  output:
+  tuple val(sample_id), path("${sample_id}_duplicates.bam"), emit: deduplicate_bam
+  path "${sample_id}_metrics.txt"
+
+  script:
+  """
+  gatk AddOrReplaceReadGroups I=${bamsorted} O=output.bam RGLB=lib1 RGPL=ILLUMINA RGPU=50 RGSM=TAAGGCGA
+  gatk MarkDuplicates \
+  -I output.bam \
+  -O ${sample_id}_duplicates.bam \
+  -M ${sample_id}_metrics.txt
+  """
+}
+
+process BaseRecalibrator {
+  publishDir 'bwa_results'
+  input:
+  tuple val(sample_id), path(deduplicate_bam)
+  path fasta
+  path dbsnp
+  path dbsnpindex
+  path index
+  path fasta_dict
+  output:
+  path("recaldata.table"), emit: recalibration_table
+
+  script:
+  """
+  gatk BaseRecalibrator \
+  -I ${deduplicate_bam} \
+  -R ${fasta} \
+  --known-sites ${dbsnp} \
+  --output recaldata.table
+  """
+}
+
+process ApplyBQSR {
+  publishDir 'bwa_results'
+  input:
+  path fasta
+  path index
+  path fasta_dict
+  tuple val(sample_id), path(deduplicate_bam)
+  path recalibration_table
+
+  output:
+  path "${sample_id}_recal.bam", emit: recalbam
+
+  script:
+  """
+  gatk ApplyBQSR \
+  -R ${fasta} \
+  -I ${deduplicate_bam} \
+  --bqsr-recal-file ${recalibration_table} \
+  -O ${sample_id}_recal.bam
+  """
+
+}
+
+  workflow BWA_MEM_wf {
     take:
-        ch_fasta
-        ch_fastq
-        // ch_index
-        // ch_dbsnp
-        // ch_fasta_dict
+        fasta
+        fastq
 
     main:
-        BWA_MEM (
-          ch_fasta,
-          ch_fastq
-          )
-
-      // ch_bam = BWA_MEM.out.bamfile
-      //     Samtools_sort (
-      //       ch_bam
-      //       )
-      // ch_bamsorted = Samtools_sort.out.bamsorted
-      // ch_baisorted = Samtools_sort.out.baisorted
-      //   MarkDuplicates (
-      //      ch_bamsorted, ch_baisorted
-      //     )
-      //
-      // ch_deduplicate_bam = MarkDuplicates.out.deduplicate_bam
-      //    BaseRecalibrator (
-      //      ch_deduplicate_bam, ch_fasta, ch_index, ch_dbsnp, ch_fasta_dict
-      //      )
+        BWA_MEM (fasta, fastq)
     emit:
         bamfile = BWA_MEM.out.bamfile
+        }
+
+  workflow Samtools_sort_wf {
+
+    take:
+        bamfile
+    main:
+        Samtools_sort(bamfile)
+    emit:
+        bamsorted = Samtools_sort.out.bamsorted
+        baisorted = Samtools_sort.out.baisorted
+
+    }
+
+  workflow MarkDuplicates_wf {
+    take:
+      bamsorted
+      baisorted
+    main:
+      MarkDuplicates(bamsorted, baisorted)
+    emit:
+      deduplicate_bam = MarkDuplicates.out.deduplicate_bam
+  }
+
+  workflow BaseRecalibrator_wf {
+    take:
+      deduplicate_bam
+      fasta
+      dbsnp
+      dbsnpindex
+      index
+      fasta_dict
+    main:
+      BaseRecalibrator(deduplicate_bam, fasta, dbsnp, dbsnpindex, index, fasta_dict)
+    emit:
+      recalibration_table = BaseRecalibrator.out.recalibration_table
+  }
+
+  workflow ApplyBQSR_wf {
+    take:
+      fasta
+      index
+      fasta_dict
+      deduplicate_bam
+      recalibration_table
+
+    main:
+      ApplyBQSR(fasta, index, fasta_dict, deduplicate_bam, recalibration_table)
+
+    emit:
+      recalbam = ApplyBQSR.out.recalbam
 
   }
 
   workflow {
     ch_fasta = Channel.fromPath(params.fasta)
-    ch_fastq = from(params.fastq)
-    // ch_dbsnp = Channel.fromPath(params.dbsnp)
-    // ch_index = Channel.fromPath(params.index)
-    // ch_fasta_dict = Channel.fromPath(params.fasta_dict)
-    BWA_MEM_WF(ch_fasta, ch_fastq)
+    ch_fastq = Channel.fromFilePairs(params.fastq+"/*_{1,2}.fastq")
+    ch_dbsnp = Channel.fromPath(params.dbsnp)
+    ch_dbsnpindex = Channel.fromPath(params.dbsnpindex)
+    ch_index = Channel.fromPath(params.index)
+    ch_fasta_dict = Channel.fromPath(params.fasta_dict)
+    BWA_MEM_wf(ch_fasta, ch_fastq)
+    Samtools_sort_wf(BWA_MEM_wf.out)
+    MarkDuplicates_wf(Samtools_sort_wf.out)
+    BaseRecalibrator_wf(MarkDuplicates_wf.out, ch_fasta, ch_dbsnp, ch_dbsnpindex, ch_index, ch_fasta_dict)
+    ApplyBQSR_wf(ch_fasta, ch_index, ch_fasta_dict, MarkDuplicates_wf.out, BaseRecalibrator_wf.out)
   }
-// , ch_index, ch_dbsnp, ch_fasta_dict
