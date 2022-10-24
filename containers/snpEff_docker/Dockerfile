@@ -1,13 +1,14 @@
 FROM ubuntu:latest
 
+RUN export DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt install -y default-jre
-RUN apt-get install default-jdk
+RUN apt-get install -y default-jdk
 RUN apt-get -y install gzip
-RUN apt-get install zip
-RUN apt-get install unzip
-RUN apt-get install wget
-WORKDIR snpEff
+RUN apt-get -y install zip
+RUN apt-get -y install unzip
+RUN apt-get -y install wget
 RUN wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 RUN unzip snpEff_latest_core.zip
 RUN rm snpEff_latest_core.zip
+WORKDIR ./snpEff
