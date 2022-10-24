@@ -15,18 +15,19 @@ process Samtools_sort {
 
 process Qualimap_bamqc {
   // tag "${sample_id}"
-  publishDir 'qualimap_bamqc_results'
+  publishDir params.qualimap_bamqc
   input:
   path(bamsorted)
+
   // tuple val(sample_id), path(bamfiles)
 
-  output:
-  path("*"), emit: bamqc
+  // output:
+  // path("*"), emit: bamqc
   // tuple val(sample_id), path("${sample_id}_bamqc.bam"), emit: bamqc_bam
 
   script:
   """
-  qualimap bamqc -bam ${bamsorted} -outdir qualimap_bamqc
+  qualimap bamqc -bam ${bamsorted} -outdir $params.qualimap_bamqc
   """
 }
 
