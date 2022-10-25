@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
 process snpEff {
-  publishDir "snpEff_results"
+  publishDir params.annvcf
 
   input:
   path vcf
@@ -11,7 +11,7 @@ process snpEff {
 
   script:
   """
-  java -jar snpEff.jar GRCh37.75 ${vcf} > test.dbsnp.ann.vcf
+  java -jar snpEff.jar ann ${vcf} > test.dbsnp.ann.vcf
   """
   }
 
