@@ -12,3 +12,4 @@ RUN wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 RUN unzip snpEff_latest_core.zip
 RUN rm snpEff_latest_core.zip
 WORKDIR ./snpEff
+RUN java -jar snpEff.jar download -v GRCh37.75

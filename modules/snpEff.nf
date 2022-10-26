@@ -7,11 +7,11 @@ process snpEff {
   path vcf
 
   output:
-  path "test.dbsnp.ann.vcf", emit: annvcf
+  path "ann20.vcf", emit: annvcf
 
   script:
   """
-  java -jar snpEff.jar ann ${vcf} > test.dbsnp.ann.vcf
+  java -Xmx8g -jar snpEff.jar ann -v GRCh37.75 ${vcf} > ann20.vcf
   """
   }
 
