@@ -8,6 +8,7 @@ RUN apt-get -y install gzip
 RUN apt-get -y install zip
 RUN apt-get -y install unzip
 RUN apt-get -y install wget
+WORKDIR ./opt
 RUN wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 RUN unzip snpEff_latest_core.zip
 RUN rm snpEff_latest_core.zip

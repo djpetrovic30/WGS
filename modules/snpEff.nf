@@ -11,7 +11,7 @@ process snpEff {
 
   script:
   """
-  java -Xmx8g -jar snpEff.jar ann -v GRCh37.75 ${vcf} > ann20.vcf
+  java -Xmx8g -jar /home/biodocker/bin/snpEff/snpEff.jar ann -v GRCh37.75 ${vcf} > ann20.vcf
   """
   }
 
