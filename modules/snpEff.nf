@@ -5,6 +5,7 @@ process snpEff {
 
   input:
   path vcf
+  path dataDir
   path config
 
   output:
@@ -12,7 +13,7 @@ process snpEff {
 
   script:
   """
-  java -Xmx8g -jar /home/biodocker/bin/snpEff/snpEff.jar -c ${config} ann -v humanchr20 ${vcf} > ann20.vcf
+  java -Xmx8g -jar /home/biodocker/bin/snpEff/snpEff.jar -dataDir ${dataDir} -c ${config} humanchr20 ${vcf} > ann20.vcf
   """
   }
 
@@ -28,15 +29,17 @@ workflow.onError {
 workflow snpEff_wf{
   take:
   vcf
+  dataDir
   config
   main:
-  snpEff(vcf, config)
+  snpEff(vcf, dataDir, config)
   emit:
   annvcf
 }
 
 workflow {
   ch_vcf = Channel.fromPath(params.vcf)
+  ch_dataDir = Channel/fromPath(params.dataDir)
   ch_config = Channel.fromPath(params.config)
-  snpEff(ch_vcf, ch_config)
+  snpEff(ch_vcf, ch_dataDir, ch_config)
 }
