@@ -39,7 +39,7 @@ workflow snpEff_wf{
 
 workflow {
   ch_vcf = Channel.fromPath(params.vcf)
-  ch_dataDir = Channel/fromPath(params.dataDir)
+  ch_dataDir = Channel.fromPath(params.dataDir)
   ch_config = Channel.fromPath(params.config)
   snpEff(ch_vcf, ch_dataDir, ch_config)
 }
